@@ -147,7 +147,7 @@ function handleCharacteristicValueChanged(event) {
 
   
 function send(data) {
-    data = Int32Array(data);
+    data = String(data);
   
     if (!data || !characteristicCache) {
       return;
