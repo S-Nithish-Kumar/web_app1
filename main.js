@@ -40,7 +40,7 @@ function requestBluetoothDevice() {
   
     return navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
-        optionalServices: ['Health Thermometer'] // Required to access service later.
+        optionalServices: [0x1809] // Required to access service later.
     }).
         then(device => {
           log('"' + device.name + '" bluetooth device selected');
