@@ -115,9 +115,9 @@ function send(data) {
 
     const data = new Uint8Array([1]);
     writeToCharacteristic(characteristicCache, data);
-    log(data, 'out');
+    log('2', 'out');
   }
   
   function writeToCharacteristic(characteristic, data) {
-    characteristic.writeValue(data);
+    characteristic.writeValue(1);
   }
