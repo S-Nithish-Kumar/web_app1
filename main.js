@@ -111,9 +111,8 @@ if (deviceCache) {
 }
 
 function send(data) {
-  
-    const resetEnergyExpended = Uint8Array.of(data);
-  
-    characteristic.writeValue(resetEnergyExpended);
-    log(resetEnergyExpended, 'out');
+
+
+    characteristic.writeValue(new TextEncoder().encode(data));
+    log(data, 'out');
   }
