@@ -124,7 +124,7 @@ function send(data) {
     }
   
     writeToCharacteristic(characteristicCache, data);
-    log(data, 'out');
+    log(typeof data);
   }
   
   function writeToCharacteristic(characteristic, data) {
