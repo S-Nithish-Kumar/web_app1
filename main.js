@@ -111,6 +111,12 @@ if (deviceCache) {
 }
 
 function send(data) {
-    //characteristic.writeValue(new TextEncoder().encode(data));
+    data = String(data);
+  
+    writeToCharacteristic(characteristicCache, data);
     log(data, 'out');
+  }
+  
+  function writeToCharacteristic(characteristic, data) {
+    characteristic.writeValue(1);
   }
