@@ -40,7 +40,7 @@ function requestBluetoothDevice() {
   
     return navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
-        optionalServices: ['00001809-0000-1000-8000-00805f9b34fb'] // Required to access service later.
+        optionalServices: ['00001802-0000-1000-8000-00805f9b34fb'] // Required to access service later.
     }).
         then(device => {
           log('"' + device.name + '" bluetooth device selected');
@@ -65,12 +65,12 @@ function connectDeviceAndCacheCharacteristic(device) {
       then(server => {
         log('GATT server connected, getting service...');
 
-        return server.getPrimaryService('00001809-0000-1000-8000-00805f9b34fb');
+        return server.getPrimaryService('00001802-0000-1000-8000-00805f9b34fb');
       }).
       then(service => {
         log('Service found, getting characteristic...');
 
-        return service.getCharacteristic('00002a1c-0000-1000-8000-00805f9b34fb');
+        return service.getCharacteristic('00002a06-0000-1000-8000-00805f9b34fb');
       }).
       then(characteristic => {
         log('Characteristic found');
@@ -126,11 +126,6 @@ if (deviceCache) {
   deviceCache = null;
 }
 
-// Data receiving
-function handleCharacteristicValueChanged(event) {
-    let value = new TextDecoder().decode(event.target.value);
-    log(value, 'in');
-  }
 
 // Intermediate buffer for incoming data
 let readBuffer = '';
