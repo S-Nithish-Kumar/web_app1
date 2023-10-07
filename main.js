@@ -124,11 +124,10 @@ function send(data) {
     }
 
     const resetEnergyExpended = Uint8Array.of(2);
-
     writeToCharacteristic(characteristicCache, resetEnergyExpended);
-    log(resetEnergyExpended);
   }
   
   function writeToCharacteristic(characteristic, resetEnergyExpended) {
+    log(resetEnergyExpended);
     characteristic.writeValue(resetEnergyExpended);
   }
