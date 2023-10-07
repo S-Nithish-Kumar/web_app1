@@ -111,12 +111,13 @@ if (deviceCache) {
 }
 
 function send(data) {
-    data = String(data);
-  
+    //data = String(data);
+
+    const data = new Uint8Array([1]);
     writeToCharacteristic(characteristicCache, data);
     log(data, 'out');
   }
   
   function writeToCharacteristic(characteristic, data) {
-    characteristic.writeValue(0x01);
+    characteristic.writeValue(data);
   }
