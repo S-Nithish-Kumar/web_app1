@@ -77,11 +77,7 @@ function connectDeviceAndCacheCharacteristic(device) {
         characteristicCache = characteristic;
 
         return characteristicCache;
-      }).
-      then(characteristic => {
-        characteristic.addEventListener('characteristicvaluechanged',
-                                        handleCharacteristicValueChanged);
-        console.log('Notifications have been started.');
+      });
 }
 // Enable the characteristic changes notification
 function startNotifications(characteristic) {
