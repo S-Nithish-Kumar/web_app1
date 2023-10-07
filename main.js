@@ -5,6 +5,7 @@ let terminalContainer = document.getElementById('terminal');
 let sendForm = document.getElementById('send-form');
 let inputField = document.getElementById('input');
 
+log("hello");
 // Connect to the device on Connect button click
 connectButton.addEventListener('click', function() {
   connect();
