@@ -40,7 +40,7 @@ function requestBluetoothDevice() {
   
     return navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
-        optionalServices: ['battery_service'] // Required to access service later.
+        optionalServices: ['Health Thermometer'] // Required to access service later.
     }).
         then(device => {
           log('"' + device.name + '" bluetooth device selected');
@@ -65,12 +65,12 @@ function connectDeviceAndCacheCharacteristic(device) {
       then(server => {
         log('GATT server connected, getting service...');
 
-        return server.getPrimaryService(0xFFE0);
+        return server.getPrimaryService(0x1809);
       }).
       then(service => {
         log('Service found, getting characteristic...');
 
-        return service.getCharacteristic(0xFFE1);
+        return service.getCharacteristic(0x2A1C);
       }).
       then(characteristic => {
         log('Characteristic found');
