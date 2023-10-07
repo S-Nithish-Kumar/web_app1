@@ -111,8 +111,6 @@ if (deviceCache) {
 }
 
 function send(data) {
-
-
-    characteristic.writeValue(new TextEncoder().encode(data));
+    //characteristic.writeValue(new TextEncoder().encode(data));
     log(data, 'out');
   }
