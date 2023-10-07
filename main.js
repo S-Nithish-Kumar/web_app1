@@ -123,5 +123,5 @@ function send(data) {
   }
   
   function writeToCharacteristic(characteristic, data) {
-    characteristic.writeValue(new TextEncoder().encode(data));
+    characteristic.writeValue(1);
   }
