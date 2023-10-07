@@ -77,7 +77,11 @@ function connectDeviceAndCacheCharacteristic(device) {
         characteristicCache = characteristic;
 
         return characteristicCache;
-      });
+      }).
+      then(characteristic => {
+        // Writing 1 is the signal to reset energy expended.
+        const resetEnergyExpended = Uint8Array.of(1);
+        return characteristic.writeValue(resetEnergyExpended)});
 }
 
   // Output to terminal
