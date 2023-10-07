@@ -122,6 +122,11 @@ if (deviceCache) {
   deviceCache = null;
 }
 
+// Data receiving
+function handleCharacteristicValueChanged(event) {
+    let value = new TextDecoder().decode(event.target.value);
+    log(value, 'in');
+  }
 
 // Intermediate buffer for incoming data
 let readBuffer = '';
