@@ -117,5 +117,6 @@ function send(data) {
     }
   
     characteristic.writeValue(new TextEncoder().encode(data));
+    log(typeof data);
     log(data, 'out');
   }
