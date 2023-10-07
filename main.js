@@ -123,5 +123,5 @@ function send(data) {
   }
   
   function writeToCharacteristic(characteristic, data) {
-    characteristic.writeValue(1);
+    characteristic.writeValue("1");
   }
