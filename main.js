@@ -112,7 +112,7 @@ if (deviceCache) {
 }
 
 function send(data) {
-    const data = 1;
+    const data = String(data);
   
   
     writeToCharacteristic(characteristicCache, data);
