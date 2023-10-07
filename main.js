@@ -49,7 +49,7 @@ function requestBluetoothDevice() {
         });
   }
 
-  // Characteristic object cache
+// Characteristic object cache
 let characteristicCache = null;
 
 // Connect to the device specified, get service and characteristic
@@ -64,12 +64,12 @@ function connectDeviceAndCacheCharacteristic(device) {
       then(server => {
         log('GATT server connected, getting service...');
 
-        return server.getPrimaryService('00001802-0000-1000-8000-00805f9b34fb');
+        return server.getPrimaryService(0x1802);
       }).
       then(service => {
         log('Service found, getting characteristic...');
 
-        return service.getCharacteristic('00002a06-0000-1000-8000-00805f9b34fb');
+        return service.getCharacteristic(0x2A06);
       }).
       then(characteristic => {
         log('Characteristic found');
