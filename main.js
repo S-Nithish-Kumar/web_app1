@@ -77,7 +77,13 @@ function connectDeviceAndCacheCharacteristic(device) {
         characteristicCache = characteristic;
 
         return characteristicCache;
-      });
+      }).
+      then(characteristic => {
+        characteristic.addEventListener('characteristicvaluechanged',
+                                        handleCharacteristicValueChanged);
+        console.log('Notifications have been started.');
+      }).
+      catch(error => { console.error(error); });
 }
 
 function handleCharacteristicValueChanged(event) {
@@ -107,6 +113,6 @@ deviceCache = null;
 
 // Output to terminal
 function log(data, type = '') {
-    terminalContainer.insertAdjacentHTML('beforeend',
-        '<div' + (type ? ' class="' + type + '"' : '') + '>' + data + '</div>');
-  }
+  terminalContainer.insertAdjacentHTML('beforeend',
+      '<div' + (type ? ' class="' + type + '"' : '') + '>' + data + '</div>');
+}
