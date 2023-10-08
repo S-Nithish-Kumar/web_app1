@@ -80,10 +80,11 @@ function connectDeviceAndCacheCharacteristic(device) {
       }).
       then(characteristic => {
         // Reading Battery Level…
+        log("Entering next level")
         return characteristic.readValue();
       })
       .then(value => {
-        console.log(`Battery percentage is ${value.getUint8(0)}`);
+        log(`Battery percentage is ${value.getUint8(0)}`);
       })
       .catch(error => { console.error(error); });
 }
