@@ -79,17 +79,14 @@ function connectDeviceAndCacheCharacteristic(device) {
         return characteristicCache;
       }).
       then(characteristic => {
-        characteristic.addEventListener('characteristicvaluechanged',
-                                        handleCharacteristicValueChanged);
-        console.log('Notifications have been started.');
-      }).
-      catch(error => { console.error(error); });
+        // Reading Battery Level…
+        return characteristic.readValue();
+      })
+      .then(value => {
+        console.log(`Battery percentage is ${value.getUint8(0)}`);
+      })
+      .catch(error => { console.error(error); });
 }
-
-function handleCharacteristicValueChanged(event) {
-    const value = event.target.value;
-    log('Received ' + value);
-  }
 
 function disconnect() {
 if (deviceCache) {
