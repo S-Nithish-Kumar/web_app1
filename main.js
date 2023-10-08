@@ -102,6 +102,7 @@ function handleCharacteristicValueChanged(event) {
   }
 
 function dataViewToHex(dataView) {
+    log("I am in");
     let hex = '';
     for (let i = 0; i < dataView.byteLength; i++) {
         const byte = dataView.getUint8(i);
