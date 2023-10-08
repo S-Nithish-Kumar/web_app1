@@ -92,19 +92,28 @@ function handleCharacteristicValueChanged(event) {
     log('Received ' + value);
   }
 
+function disconnect() {
+if (deviceCache) {
+    log('Disconnecting from "' + deviceCache.name + '" bluetooth device...');
+    deviceCache.removeEventListener('gattserverdisconnected',
+        handleDisconnection);
 
-navigator.bluetooth.requestDevice({ filters: [{ name: 'Francois robot' }] })
-.then(device => {
-  // Set up event listener for when device gets disconnected.
-  device.addEventListener('gattserverdisconnected', onDisconnected);
-
-  // Attempts to connect to remote GATT Server.
-  return device.gatt.connect();
-})
-.then(server => { /* … */ })
-.catch(error => { console.error(error); });
-
-function onDisconnected(event) {
-  const device = event.target;
-  console.log(`Device ${device.name} is disconnected.`);
+    if (deviceCache.gatt.connected) {
+    deviceCache.gatt.disconnect();
+    log('"' + deviceCache.name + '" bluetooth device disconnected');
+    }
+    else {
+    log('"' + deviceCache.name +
+        '" bluetooth device is already disconnected');
+    }
 }
+
+characteristicCache = null;
+deviceCache = null;
+}
+
+// Output to terminal
+function log(data, type = '') {
+    terminalContainer.insertAdjacentHTML('beforeend',
+        '<div' + (type ? ' class="' + type + '"' : '') + '>' + data + '</div>');
+  }
