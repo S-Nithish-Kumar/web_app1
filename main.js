@@ -32,6 +32,7 @@ function connect() {
   return (deviceCache ? Promise.resolve(deviceCache) :
       requestBluetoothDevice()).
       then(device => connectDeviceAndCacheCharacteristic(device)).
+      then(characteristic => startNotifications(characteristic)).
       catch(error => log(error));
 }
 
@@ -65,28 +66,39 @@ function connectDeviceAndCacheCharacteristic(device) {
       then(server => {
         log('GATT server connected, getting service...');
 
-        return server.getPrimaryService('00001809-0000-1000-8000-00805f9b34fb');
+        return server.getPrimaryService(0x1809);
       }).
       then(service => {
         log('Service found, getting characteristic...');
 
-        return service.getCharacteristic('00002a1c-0000-1000-8000-00805f9b34fb');
+        return service.getCharacteristic(0x2A1C);
       }).
       then(characteristic => {
         log('Characteristic found');
         characteristicCache = characteristic;
 
         return characteristicCache;
-      }).
-      then(characteristic => {
-        // Reading Battery Level…
-        log("Entering next level")
-        return characteristic.readValue();
-      })
-      .then(value => {
-        log(`Battery percentage`);
       });
 }
+
+// Enable the characteristic changes notification
+function startNotifications(characteristic) {
+    log('Starting notifications...');
+  
+    return characteristic.startNotifications().
+        then(() => {
+          log('Notifications started');
+          // Added line
+          characteristic.addEventListener('characteristicvaluechanged',
+              handleCharacteristicValueChanged);
+        });
+  }
+
+// Data receiving
+function handleCharacteristicValueChanged(event) {
+    let value = new TextDecoder().decode(event.target.value);
+    log(value, 'in');
+  }
 
 function disconnect() {
 if (deviceCache) {
