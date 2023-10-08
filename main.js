@@ -96,7 +96,7 @@ function startNotifications(characteristic) {
 
 // Data receiving
 function handleCharacteristicValueChanged(event) {
-    let value = event.target.value;
+    let value = new TextDecoder().decode(event.target.value);
     log(value, 'in');
   }
 
