@@ -32,6 +32,7 @@ function connect() {
   return (deviceCache ? Promise.resolve(deviceCache) :
       requestBluetoothDevice()).
       then(device => connectDeviceAndCacheCharacteristic(device)).
+      then(characteristic => startNotifications(characteristic)).
       catch(error => log(error));
 }
 
@@ -39,8 +40,7 @@ function requestBluetoothDevice() {
     log('Requesting bluetooth device...');
   
     return navigator.bluetooth.requestDevice({
-        acceptAllDevices: true,
-        optionalServices: ['00001802-0000-1000-8000-00805f9b34fb'] // Required to access service later.
+      filters: [{services: [0xFFE0]}],
     }).
         then(device => {
           log('"' + device.name + '" bluetooth device selected');
@@ -50,7 +50,7 @@ function requestBluetoothDevice() {
         });
   }
 
-// Characteristic object cache
+  // Characteristic object cache
 let characteristicCache = null;
 
 // Connect to the device specified, get service and characteristic
@@ -65,12 +65,12 @@ function connectDeviceAndCacheCharacteristic(device) {
       then(server => {
         log('GATT server connected, getting service...');
 
-        return server.getPrimaryService(0x1802);
+        return server.getPrimaryService(0xFFE0);
       }).
       then(service => {
         log('Service found, getting characteristic...');
 
-        return service.getCharacteristic(0x2A06);
+        return service.getCharacteristic(0xFFE1);
       }).
       then(characteristic => {
         log('Characteristic found');
@@ -79,55 +79,31 @@ function connectDeviceAndCacheCharacteristic(device) {
         return characteristicCache;
       }).
       then(characteristic => {
-        // Writing 1 is the signal to reset energy expended.
-        const resetEnergyExpended = Uint8Array.of(1);
-        return characteristic.writeValue(resetEnergyExpended);
-      });
+        characteristic.addEventListener('characteristicvaluechanged',
+                                        handleCharacteristicValueChanged);
+        console.log('Notifications have been started.');
+      }).
+      catch(error => { console.error(error); });
 }
 
-  // Output to terminal
-function log(data, type = '') {
-    terminalContainer.insertAdjacentHTML('beforeend',
-        '<div' + (type ? ' class="' + type + '"' : '') + '>' + data + '</div>');
+function handleCharacteristicValueChanged(event) {
+    const value = event.target.value;
+    log('Received ' + value);
   }
 
-function disconnect() {
-if (deviceCache) {
-    log('Disconnecting from "' + deviceCache.name + '" bluetooth device...');
-    deviceCache.removeEventListener('gattserverdisconnected',
-        handleDisconnection);
 
-    if (deviceCache.gatt.connected) {
-    deviceCache.gatt.disconnect();
-    log('"' + deviceCache.name + '" bluetooth device disconnected');
-    }
-    else {
-    log('"' + deviceCache.name +
-        '" bluetooth device is already disconnected');
-    }
+navigator.bluetooth.requestDevice({ filters: [{ name: 'Francois robot' }] })
+.then(device => {
+  // Set up event listener for when device gets disconnected.
+  device.addEventListener('gattserverdisconnected', onDisconnected);
+
+  // Attempts to connect to remote GATT Server.
+  return device.gatt.connect();
+})
+.then(server => { /* … */ })
+.catch(error => { console.error(error); });
+
+function onDisconnected(event) {
+  const device = event.target;
+  console.log(`Device ${device.name} is disconnected.`);
 }
-  // Added condition
-  if (characteristicCache) {
-    characteristicCache.removeEventListener('characteristicvaluechanged',
-        handleCharacteristicValueChanged);
-    characteristicCache = null;
-  }
-
-  deviceCache = null;
-}
-
-function send(data) {
-    data = String(data);
-  
-    if (!data || !characteristicCache) {
-      return;
-    }
-
-    const resetEnergyExpended = Uint8Array.of(2);
-    writeToCharacteristic(characteristicCache, resetEnergyExpended);
-  }
-  
-  function writeToCharacteristic(characteristic, resetEnergyExpended) {
-    log(resetEnergyExpended);
-    characteristic.writeValue(resetEnergyExpended);
-  }
