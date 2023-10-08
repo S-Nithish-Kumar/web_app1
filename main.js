@@ -84,9 +84,8 @@ function connectDeviceAndCacheCharacteristic(device) {
         return characteristic.readValue();
       })
       .then(value => {
-        log(`Battery percentage is ${value.getUint8(0)}`);
-      })
-      .catch(error => { console.error(error); });
+        log(`Battery percentage`);
+      });
 }
 
 function disconnect() {
