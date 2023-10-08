@@ -96,9 +96,19 @@ function startNotifications(characteristic) {
 
 // Data receiving
 function handleCharacteristicValueChanged(event) {
-    let value = new TextDecoder().decode(event.target.value);
+    //let value = new TextDecoder().decode(event.target.value);
+    dataViewToHex(event.target.value);
     log(value, 'in');
   }
+
+function dataViewToHex(dataView) {
+    let hex = '';
+    for (let i = 0; i < dataView.byteLength; i++) {
+        const byte = dataView.getUint8(i);
+        hex += ('0' + byte.toString(16)).slice(-2); // Ensure two-digit representation
+    }
+    return hex.toUpperCase(); // Optionally convert to uppercase
+}
 
 function disconnect() {
 if (deviceCache) {
